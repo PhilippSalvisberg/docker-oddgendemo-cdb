@@ -52,11 +52,11 @@ else
         (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1522))\n\
       )\n\
     )\n\
-    USE_SID_AS_SERVICE_LISTENER=ON" > ${ORACLE_HOME}/network/admin/listener.ora
+USE_SID_AS_SERVICE_LISTENER=ON\n" > ${ORACLE_HOME}/network/admin/listener.ora
 fi
 
 # fix ownership and access rights
 chown oracle:dba ${ORACLE_HOME}/network/admin/tnsnames.ora
-chown 664 ${ORACLE_HOME}/network/admin/tnsnames.ora
+chmod 664 ${ORACLE_HOME}/network/admin/tnsnames.ora
 chown oracle:dba ${ORACLE_HOME}/network/admin/listener.ora
-chown 664 ${ORACLE_HOME}/network/admin/listener.ora
+chmod 664 ${ORACLE_HOME}/network/admin/listener.ora
