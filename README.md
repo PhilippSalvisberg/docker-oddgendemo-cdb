@@ -21,7 +21,7 @@ Pull the latest build from [Docker Hub](https://hub.docker.com/r/phsalvisberg/od
 
 Please see [Readme Information for Oracle Database 12c Release 1 (12.1.0.2)](https://docs.oracle.com/database/121/READM/chapter12102.htm#READM120) regarding restrictions of CDB architecture.
 
-See [PhilippSalvisberg/docker-oddgendemo](https://github.com/PhilippSalvisberg/docker-oddgendemo) if you are interested in a non-CDB variant of this image.
+See [docker-oddgendemo](https://github.com/PhilippSalvisberg/docker-oddgendemo) if you are interested in a non-CDB variant of this image.
 
 ## Installation
 
