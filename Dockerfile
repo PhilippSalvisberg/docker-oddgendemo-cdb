@@ -19,7 +19,7 @@ ADD assets /assets/
 RUN /assets/image_setup.sh
 
 # database port and web console port
-EXPOSE 1521 8083 8084
+EXPOSE 1522 8083 8084
 
 # use ${ORACLE_BASE} without product subdirectory as data volume
 VOLUME ["/u01/app/oracle"]

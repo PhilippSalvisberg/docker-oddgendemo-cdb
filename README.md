@@ -35,9 +35,9 @@ Complete the following steps to create a new container:
 
 2. Create the container
 
-		docker run -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+		docker run -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
-3. wait around **30 minutes** until the Oracle database instance is created and APEX is patched to the latest version. Check logs with ```docker logs ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
+3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
 Feel free to stop the docker container after a successful installation with ```docker stop ocdb```. The container should shutdown the database gracefully and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
 
@@ -62,7 +62,7 @@ PASS | ```oracle```| Password for SYS and SYSTEM
 Here's an example run call amending the SYS/SYSTEM password and DBCA memory settings:
 
 ```
-docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 #### Volumes
@@ -70,13 +70,13 @@ docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 8083:8083 -p 8084:808
 The image defines a volume for ```/u01/app/oracle```. You may map this volume to a storage solution of your choice. Here's an example using a named volume ```ocdb```:
 
 ```
-docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 Here's an example mapping the local directory ```$HOME/docker/ocdb/u01/app/oracle``` to ```/u01/app/oracle```. 
 
 ```
-docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 ## Access To Database Services
@@ -184,7 +184,7 @@ Complete the following steps to restore an image from scratch. There are other w
 
 6. Create the container using the ```ocdb```volume
 
-		docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+		docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
 7. Check log of ```ocdb``` container
 

@@ -19,18 +19,19 @@ case "$1" in
 			rm -rf /u01/app/oracle-product/12.1.0.2/dbhome/dbs
 			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
 			#Startup Database
-			gosu oracle bash -c "${ORACLE_HOME}/bin/tnslsnr &"
+			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start &"
 			gosu oracle bash -c 'echo startup\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 		else
 			echo "No data files found in ${ORACLE_BASE}/oradata, initializing database."
 			mv /u01/app/oracle-product/12.1.0.2/dbhome/dbs /u01/app/oracle/dbs
 			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
 			echo "Starting TNS Listener."
-			gosu oracle bash -c "${ORACLE_HOME}/bin/tnslsnr &"
+			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start &"
 			gosu oracle bash -c "${ORACLE_HOME}/bin/dbca -silent -createDatabase -templateName General_Purpose.dbc \
 			   -gdbname ${GDBNAME} -sid ${ORACLE_SID} -createAsContainerDatabase true -numberOfPDBs 1 -pdbName ${PDB_NAME} \
 			   -responseFile NO_VALUE -characterSet AL32UTF8 -totalMemory ${DBCA_TOTAL_MEMORY} -emConfiguration DBEXPRESS \
 			   -sysPassword ${PASS} -systemPassword ${PASS} -pdbAdminUserName pdbadmin -pdbAdminPassword ${PASS}"
+			gosu oracle bash -c 'echo -e "ALTER SYSTEM SET LOCAL_LISTENER='"'"'(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1522))'"'"' SCOPE=BOTH;\n ALTER SYSTEM REGISTER;\n EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 			gosu oracle bash -c 'echo -e "ALTER PLUGGABLE DATABASE opdb1 OPEN;\n ALTER PLUGGABLE DATABASE opdb1 SAVE STATE;\n EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 			echo "removing APEX from CDB"
 			gosu oracle bash -c 'cd ${ORACLE_HOME}/apex.old; echo EXIT | /opt/sqlcl/bin/sql -s -l / as sysdba @apxremov_con.sql'
@@ -38,6 +39,10 @@ case "$1" in
 				. /assets/install_apex.sh
 			fi			
 			echo "Database initialized."
+			echo "Installing schema SCOTT."
+			export TWO_TASK=opdb1
+			${ORACLE_HOME}/bin/sqlplus sys/oracle@opdb1 as sysdba @${ORACLE_HOME}/rdbms/admin/utlsampl.sql
+			unset TWO_TASK
 			echo "Installing Oracle sample schemas."
 			. /assets/install_oracle_sample_schemas.sh
 			echo "Installing FTLDB."
