@@ -25,16 +25,18 @@ case "$1" in
 			echo "No data files found in ${ORACLE_BASE}/oradata, initializing database."
 			mv /u01/app/oracle-product/12.1.0.2/dbhome/dbs /u01/app/oracle/dbs
 			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
+			echo "Start TNS Listener."
+			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
 			gosu oracle bash -c "${ORACLE_HOME}/bin/dbca -silent -createDatabase -templateName General_Purpose.dbc \
 			   -gdbname ${GDBNAME} -sid ${ORACLE_SID} -createAsContainerDatabase true -numberOfPDBs 1 -pdbName ${PDB_NAME} \
 			   -responseFile NO_VALUE -characterSet AL32UTF8 -totalMemory ${DBCA_TOTAL_MEMORY} -emConfiguration DBEXPRESS \
+			   -listeners LISTENER \
 			   -sysPassword ${PASS} -systemPassword ${PASS} -pdbAdminUserName pdbadmin -pdbAdminPassword ${PASS}"
-			echo "Starting TNS Listener."
+			echo "Change listener port."
 			gosu oracle bash -c 'echo -e "ALTER SYSTEM SET LOCAL_LISTENER='"'"'(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1522))'"'"' SCOPE=BOTH;\n ALTER SYSTEM REGISTER;\n EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
-			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
 			echo "Save open state of PDB."
 			gosu oracle bash -c 'echo -e "ALTER PLUGGABLE DATABASE opdb1 OPEN;\n ALTER PLUGGABLE DATABASE opdb1 SAVE STATE;\n EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
-			echo "removing APEX from CDB"
+			echo "Remove APEX from CDB"
 			gosu oracle bash -c 'cd ${ORACLE_HOME}/apex.old; echo EXIT | /opt/sqlcl/bin/sql -s -l / as sysdba @apxremov_con.sql'
 			if [ $WEB_CONSOLE == "true" ]; then
 				. /assets/install_apex.sh
