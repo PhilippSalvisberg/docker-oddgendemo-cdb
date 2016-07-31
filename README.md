@@ -70,7 +70,7 @@ docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 8083:8083 -p 8084:808
 The image defines a volume for ```/u01/app/oracle```. You may map this volume to a storage solution of your choice. Here's an example using a named volume ```ocdb```:
 
 ```
-docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo
+docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1521 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 Here's an example mapping the local directory ```$HOME/docker/ocdb/u01/app/oracle``` to ```/u01/app/oracle```. 
