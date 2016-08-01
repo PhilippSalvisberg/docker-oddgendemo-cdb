@@ -79,6 +79,8 @@ Here's an example mapping the local directory ```$HOME/docker/ocdb/u01/app/oracl
 docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 1522:1522 -p 8083:8083 -p 8084:8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
+**Please note**: Volumes mapped to a local directories are not stable, at least not in Docker for Mac 1.12. E.g. creating a database may never finish. So I recommend not to use local mapped directories for the time being. Alternatively you may use a volume plugin. A comprehensive list of volume plugins is listed [here](https://docs.docker.com/engine/extend/plugins/#volume-plugins).
+
 ## Access To Database Services
 
 ### Enterprise Manager Database Express 12c
@@ -183,18 +185,11 @@ Complete the following steps to restore an image from scratch. There are other w
 	
 	The end of the log should look as follows:
 	
-		ORACLE instance started.
+		Reuse existing database.
 
-		Total System Global Area 1610612736 bytes
-		Fixed Size		    2924928 bytes
-		Variable Size		  520097408 bytes
-		Database Buffers	 1073741824 bytes
-		Redo Buffers		   13848576 bytes
-		Database mounted.
-		Database opened.
+		(...)
 
 		Database ready to use. Enjoy! ;-)
-
 
 ## Issues
 
