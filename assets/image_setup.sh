@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # add hostname
-echo "127.0.0.1 odbcdb.oddgen.org odbcdb" >> /etc/hosts
+echo "127.0.0.1 ocdb.oddgen.org ocdb" >> /etc/hosts
 
 # download and exract FTLDB software
 echo "downloading FTLDB."
