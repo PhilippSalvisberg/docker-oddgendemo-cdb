@@ -35,7 +35,7 @@ Complete the following steps to create a new container:
 
 2. Create the container
 
-		docker run -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+		docker run -d -p 1522:1522 -p 8083:8083 -p 8084:8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
 3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
@@ -62,7 +62,7 @@ PASS | ```oracle```| Password for SYS and SYSTEM
 Here's an example run call amending the SYS/SYSTEM password and DBCA memory settings:
 
 ```
-docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 1522:1522 -p 8083:8083 -p 8084:8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 #### Volumes
@@ -70,34 +70,25 @@ docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 8083:8083 -p 8084:808
 The image defines a volume for ```/u01/app/oracle```. You may map this volume to a storage solution of your choice. Here's an example using a named volume ```ocdb```:
 
 ```
-docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -v ocdb:/u01/app/oracle -d -p 1522:1522 -p 8083:8083 -p 8084:8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 Here's an example mapping the local directory ```$HOME/docker/ocdb/u01/app/oracle``` to ```/u01/app/oracle```. 
 
 ```
-docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 1522:1522 -p 8083:8083 -p 8084:8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 ## Access To Database Services
 
 ### Enterprise Manager Database Express 12c
 
-CDB [http://localhost:8083/em/](http://localhost:8083/em/)
+[http://localhost:8083/em/](http://localhost:8083/em/)
 
 User | Password 
 -------- | -----
 system | oracle
 sys | oracle
-
-
-PDB [http://localhost:8084/em/](http://localhost:8084/em/)
-
-User | Password 
--------- | -----
-system | oracle
-sys | oracle
-
 
 ### APEX
 
@@ -184,30 +175,23 @@ Complete the following steps to restore an image from scratch. There are other w
 
 6. Create the container using the ```ocdb```volume
 
-		docker run -v ocdb:/u01/app/oracle -d -p 8083:8083 -p 8084:8084 -p 1522:1522 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+		docker run -v ocdb:/u01/app/oracle -d -p 1522:1522 -p 8083:8083 -p 8084:8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
 7. Check log of ```ocdb``` container
 
 		docker logs ocdb
 	
-	The log should look as follows:
+	The end of the log should look as follows:
 	
-		Found data files in /u01/app/oracle/oradata, initial database does not need to be created.
 		ORACLE instance started.
 
-		Total System Global Area  629145600 bytes
-		Fixed Size		    2927528 bytes
-		Variable Size		  306185304 bytes
-		Database Buffers	  314572800 bytes
-		Redo Buffers		    5459968 bytes
+		Total System Global Area 1610612736 bytes
+		Fixed Size		    2924928 bytes
+		Variable Size		  520097408 bytes
+		Database Buffers	 1073741824 bytes
+		Redo Buffers		   13848576 bytes
 		Database mounted.
 		Database opened.
-
-		PL/SQL procedure successfully completed.
-
-		APEX and EM Database Express 12c initialized. Please visit
-		   - http://localhost:8082/em
-		   - http://localhost:8082/apex
 
 		Database ready to use. Enjoy! ;-)
 
