@@ -15,7 +15,7 @@ case "$1" in
 			echo "Reuse existing database."
 			echo "ocdb:$ORACLE_HOME:N" >> /etc/oratab
 			chown oracle:dba /etc/oratab
-			chown 664 /etc/oratab
+			chmod 664 /etc/oratab
 			rm -rf /u01/app/oracle-product/12.1.0.2/dbhome/dbs
 			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
 			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
