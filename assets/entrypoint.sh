@@ -8,24 +8,22 @@ set -e
 
 case "$1" in
 	'')
-		# default behaviour when no parameters are passed
+		# default behaviour when no parameters are passed to the container
 
-		#Check for mounted database files
-		if [ "$(ls -A ${ORACLE_BASE}/oradata)" ]; then
-			echo "Found data files in ${ORACLE_BASE}/oradata, initial database does not need to be created."
+		# Startup database if oradata directory is found otherwise create a database
+		if [ -d ${ORACLE_BASE}/oradata ]; then
+			echo "Reuse existing database."
 			echo "ocdb:$ORACLE_HOME:N" >> /etc/oratab
 			chown oracle:dba /etc/oratab
 			chown 664 /etc/oratab
 			rm -rf /u01/app/oracle-product/12.1.0.2/dbhome/dbs
 			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
-			#Startup Database
 			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
 			gosu oracle bash -c 'echo startup\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 		else
-			echo "No data files found in ${ORACLE_BASE}/oradata, initializing database."
+			echo "Creating database."
 			mv /u01/app/oracle-product/12.1.0.2/dbhome/dbs /u01/app/oracle/dbs
 			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
-			echo "Start TNS Listener."
 			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
 			gosu oracle bash -c "${ORACLE_HOME}/bin/dbca -silent -createDatabase -templateName General_Purpose.dbc \
 			   -gdbname ${GDBNAME} -sid ${ORACLE_SID} -createAsContainerDatabase true -numberOfPDBs 1 -pdbName ${PDB_NAME} \
@@ -38,9 +36,12 @@ case "$1" in
 			echo "Remove APEX from CDB"
 			gosu oracle bash -c 'cd ${ORACLE_HOME}/apex.old; echo EXIT | /opt/sqlcl/bin/sql -s -l / as sysdba @apxremov_con.sql'
 			if [ $WEB_CONSOLE == "true" ]; then
+				gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(8083\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 				. /assets/install_apex.sh
-			fi			
-			echo "Database initialized."
+			else
+				gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(0\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
+				gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(0\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} as sysdba'
+			fi
 			echo "Installing schema SCOTT."
 			export TWO_TASK=opdb1
 			${ORACLE_HOME}/bin/sqlplus sys/oracle@opdb1 as sysdba @${ORACLE_HOME}/rdbms/admin/utlsampl.sql
@@ -55,19 +56,6 @@ case "$1" in
 			. /assets/install_oddgen.sh
 		fi
 		
-		if [ $WEB_CONSOLE == "true" ]; then
-			gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(8083\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
-			gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(8084\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} as sysdba'
-			echo "APEX and EM Database Express 12c initialized. Please visit"
-			echo "   - http://localhost:8083/em (${ORACLE_SID})"
-			echo "   - http://localhost:8084/em (${PDB_NAME})"
-			echo "   - http://localhost:8084/apex"
-		else
-			echo 'Disabling APEX and EM Database Express 12c'
-			gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(0\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
-			gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(0\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} as sysdba'
-		fi
-
 		# Successful installation/startup
 		echo ""
 		echo "Database ready to use. Enjoy! ;-)"
@@ -78,7 +66,7 @@ case "$1" in
 		;;
 
 	*)
-		# use parameters 
+		# use parameters passed to the container
 		
 		echo ""
 		echo "Overridden default behaviour. Run /assets/entrypoint.sh when ready."	
