@@ -7,7 +7,7 @@ This image contains the following:
 * Oracle Linux 7.2
 * Oracle Database 12.1.0.2 Enterprise Edition with CDB architecture
 	* Container database (CDB$ROOT)
-		* removed APEX
+		* removed APEX 4.2.5
 	* Pluggable database (OPDB1)
 		* Sample schemas SCOTT, HR, OE, PM, IX, SH, BI (master branch as of build time)
 		* APEX 5.0.4
@@ -37,7 +37,7 @@ Complete the following steps to create a new container:
 
 		docker run -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
-3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
+3. wait around **20 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs ocdb -f```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
 Feel free to stop the docker container after a successful installation with ```docker stop ocdb```. The container should shutdown the database gracefully and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
 
