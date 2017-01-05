@@ -36,7 +36,7 @@ Complete the following steps to create a new container:
 
 		docker run -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
-3. wait around **20 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs ocdb -f```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
+3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
 Feel free to stop the docker container after a successful installation with ```docker stop ocdb```. The container should shutdown the database gracefully and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
 
@@ -49,7 +49,7 @@ You may set the environment variables in the docker run statement to configure t
 
 Environment variable | Default value | Comments
 -------------------- | ------------- | --------
-WEB_CONSOLE | ```true``` | Set to ```false``` If you do not need APEX and Enterprise Manger Database Express 12c
+WEB_CONSOLE | ```true``` | Set to ```false``` if you do not need APEX and Enterprise Manger Database Express 12c (container is created faster, since APEX will not be removed from CDB and installed in PDB)
 DBCA_TOTAL_MEMORY | ```2048```| Keep in mind that DBCA fails if you set this value too low
 GDBNAME | ```ocdb.docker``` | The global database name, used also as service name for the container database
 ORACLE_SID | ```ocdb```| The Oracle SID of the container database
