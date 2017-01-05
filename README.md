@@ -58,10 +58,10 @@ SERVICE_NAME | ```opdb1.docker``` | The Oracle Service Name for the pluggable da
 APEX_PASS | ```Oracle12c!```| Initial APEX ADMIN password
 PASS | ```oracle```| Password for SYS and SYSTEM
 
-Here's an example run call amending the SYS/SYSTEM password and DBCA memory settings:
+Here's an example run call amending the SYS/SYSTEM password and skip APEX installation in PDB:
 
 ```
-docker run -e PASS=manager -e DBCA_TOTAL_MEMORY=1536 -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
+docker run -e PASS=manager -e WEB_CONSOLE=false -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
 #### Volumes
