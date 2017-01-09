@@ -38,7 +38,7 @@ Complete the following steps to create a new container:
 		
 3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
-Feel free to stop the docker container after a successful installation with ```docker stop ocdb```. The container should shutdown the database gracefully and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
+Feel free to stop the docker container after a successful installation with ```docker stop -t 30 ocdb```. The container should shutdown the database gracefully within the given 30 seconds and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
 
 
 ### Options
@@ -140,7 +140,7 @@ Complete the following steps to backup the data volume:
 
 1. Stop the container with 
 
-		docker stop ocdb
+		docker stop -t 30 ocdb
 		
 2. Backup the data volume to a compressed file ```ocdb.tar.gz``` in the current directory with a little help from the ubuntu image
 
@@ -156,7 +156,7 @@ Complete the following steps to restore an image from scratch. There are other w
 
 1. Stop the container with 
 
-		docker stop ocdb
+		docker stop -t 30 ocdb
 
 2. Remove the container with its associated volume 
 
