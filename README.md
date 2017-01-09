@@ -16,7 +16,7 @@ This image contains the following:
 		* oddgen example/tutorial schemas ODDGEN, OGDEMO (master branch as of build time)
 * Oracle SQLcl: Release 4.2.0.16.355.0402 
 	
-Pull the latest build from [Docker Hub](https://hub.docker.com/r/phsalvisberg/oddgendemo-cdb/).
+Pull the latest build from [Docker Store](https://store.docker.com/community/images/phsalvisberg/oddgendemo-cdb)
 
 Please see [Readme Information for Oracle Database 12c Release 1 (12.1.0.2)](https://docs.oracle.com/database/121/READM/chapter12102.htm#READM120) regarding restrictions of CDB architecture.
 
