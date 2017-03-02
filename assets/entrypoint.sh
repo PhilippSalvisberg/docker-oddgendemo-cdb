@@ -16,14 +16,14 @@ case "$1" in
 			echo "ocdb:$ORACLE_HOME:N" >> /etc/oratab
 			chown oracle:dba /etc/oratab
 			chmod 664 /etc/oratab
-			rm -rf /u01/app/oracle-product/12.1.0.2/dbhome/dbs
-			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
+			rm -rf /u01/app/oracle-product/12.2.0.1/dbhome/dbs
+			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.2.0.1/dbhome/dbs
 			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
 			gosu oracle bash -c 'echo startup\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 		else
 			echo "Creating database."
-			mv /u01/app/oracle-product/12.1.0.2/dbhome/dbs /u01/app/oracle/dbs
-			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.1.0.2/dbhome/dbs
+			mv /u01/app/oracle-product/12.2.0.1/dbhome/dbs /u01/app/oracle/dbs
+			ln -s /u01/app/oracle/dbs /u01/app/oracle-product/12.2.0.1/dbhome/dbs
 			gosu oracle bash -c "${ORACLE_HOME}/bin/lsnrctl start"
 			gosu oracle bash -c "${ORACLE_HOME}/bin/dbca -silent -createDatabase -templateName General_Purpose.dbc \
 			   -gdbname ${GDBNAME} -sid ${ORACLE_SID} -createAsContainerDatabase true -numberOfPDBs 1 -pdbName ${PDB_NAME} \

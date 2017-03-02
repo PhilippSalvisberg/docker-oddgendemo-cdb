@@ -35,9 +35,16 @@ apex_install(){
     echo -e "\n\n${APEX_PASS}" | /opt/sqlcl/bin/sql -s -l sys/${PASS}@${PDB_NAME} AS sysdba @apxchpwd.sql
 }
 
+apex_load_images() {
+	echo "Load APEX images."
+	# do not load images from path containing soft links to avoid "ORA-22288: file or LOB operation FILEOPEN failed"
+	echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA @apxldimg.sql `readlink -f ${ORACLE_HOME}`
+}
+
 disable_http
 apex_create_tablespace
 apex_install
+apex_load_images
 apex_epg_config
 enable_http
 cd /

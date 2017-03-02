@@ -1,11 +1,11 @@
-# oddgen Demo using an Oracle Database 12.1.0.2 Enterprise Edition with CDB Architecture
+# oddgen Demo using an Oracle Database 12.2.0.1 Enterprise Edition with CDB Architecture
 
 ## Content
 
 This image contains the following:
 
 * Oracle Linux 7.3
-* Oracle Database 12.1.0.2 Enterprise Edition with CDB architecture
+* Oracle Database 12.2.0.1 Enterprise Edition with CDB architecture
 	* Container database (CDB$ROOT)
 		* removed APEX 4.2.5
 	* Pluggable database (OPDB1)
@@ -18,7 +18,7 @@ This image contains the following:
 	
 Pull the latest build from [Docker Store](https://store.docker.com/community/images/phsalvisberg/oddgendemo-cdb)
 
-Please see [Readme Information for Oracle Database 12c Release 1 (12.1.0.2)](https://docs.oracle.com/database/121/READM/chapter12102.htm#READM120) regarding restrictions of CDB architecture.
+Please see [Readme Information for Oracle Database 12c Release 2 (12.2)](https://docs.oracle.com/database/122/READM/features-not-available-12-2-beta.htm#READM-GUID-80BA0601-969E-45F3-9AAF-E570B03E7D7D) regarding restrictions of CDB architecture.
 
 See [docker-oddgendemo](https://github.com/PhilippSalvisberg/docker-oddgendemo) if you are interested in a non-CDB variant of this image.
 
