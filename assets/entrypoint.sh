@@ -36,6 +36,7 @@ case "$1" in
 			echo "Remove APEX from CDB"
 			gosu oracle bash -c 'cd ${ORACLE_HOME}/apex.old; echo EXIT | /opt/sqlcl/bin/sql -s -l / as sysdba @apxremov_con.sql'
 			if [ $WEB_CONSOLE == "true" ]; then
+				gosu oracle bash -c 'echo EXEC DBMS_XDB_CONFIG.setglobalportenabled\(true\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 				gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(8083\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 				. /assets/install_apex.sh
 			else
