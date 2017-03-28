@@ -18,6 +18,9 @@ apex_epg_config(){
 	echo "ALTER USER ANONYMOUS ACCOUNT UNLOCK;" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA
 	echo "Unlock anonymous account on CDB"
 	echo "ALTER USER ANONYMOUS ACCOUNT UNLOCK;" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${ORACLE_SID} AS SYSDBA
+	echo "Optimizing EPG performance"
+	echo "ALTER SYSTEM SET SHARED_SERVERS=15 SCOPE=BOTH;" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${ORACLE_SID} AS SYSDBA
+	echo -e "ALTER SYSTEM SET DISPATCHERS='(PROTOCOL=TCP) (SERVICE=${ORACLE_SID}XDB) (DISPATCHERS=3)' SCOPE=BOTH;" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${ORACLE_SID} AS SYSDBA
 }
 
 apex_create_tablespace(){
@@ -41,10 +44,18 @@ apex_load_images() {
 	echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA @apxldimg.sql `readlink -f ${ORACLE_HOME}`
 }
 
+apex_rest_config() {
+	echo "Getting ready for ORDS. Creating user APEX_LISTENER and APEX_REST_PUBLIC_USER."
+	echo -e "${PASS}\n${PASS}" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS sysdba @apex_rest_config.sql
+	echo "ALTER USER APEX_PUBLIC_USER ACCOUNT UNLOCK;" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA
+	echo "ALTER USER APEX_PUBLIC_USER IDENTIFIED BY ${PASS};" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA
+}
+
 disable_http
 apex_create_tablespace
 apex_install
 apex_load_images
 apex_epg_config
+apex_rest_config
 enable_http
 cd /

@@ -33,8 +33,6 @@ case "$1" in
 			gosu oracle bash -c 'echo -e "ALTER SYSTEM SET LOCAL_LISTENER='"'"'(ADDRESS = (PROTOCOL = TCP)(HOST = $(hostname))(PORT = 1522))'"'"' SCOPE=BOTH;\n ALTER SYSTEM REGISTER;\n EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 			echo "Save open state of PDB."
 			gosu oracle bash -c 'echo -e "ALTER PLUGGABLE DATABASE opdb1 OPEN;\n ALTER PLUGGABLE DATABASE opdb1 SAVE STATE;\n EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
-			echo "Remove APEX from CDB"
-			gosu oracle bash -c 'cd ${ORACLE_HOME}/apex.old; echo EXIT | /opt/sqlcl/bin/sql -s -l / as sysdba @apxremov_con.sql'
 			if [ $WEB_CONSOLE == "true" ]; then
 				gosu oracle bash -c 'echo EXEC DBMS_XDB_CONFIG.setglobalportenabled\(true\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
 				gosu oracle bash -c 'echo EXEC DBMS_XDB.sethttpport\(8083\)\; | ${ORACLE_HOME}/bin/sqlplus -s -l / as sysdba'
