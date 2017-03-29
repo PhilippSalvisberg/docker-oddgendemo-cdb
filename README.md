@@ -9,7 +9,7 @@ This image contains the following:
 	* Container database (CDB$ROOT)
 	* Pluggable database (OPDB1)
 		* Sample schemas SCOTT, HR, OE, PM, IX, SH, BI (master branch as of build time)
-		* APEX 5.1 including APEX\_LISTENER and APEX\_REST\_PUBLIC\_USER
+		* APEX 5.1.1 including APEX\_LISTENER and APEX\_REST\_PUBLIC\_USER
 		* FTLDB 1.5.0
 		* tePLSQL (master branch as of build time)
 		* oddgen example/tutorial schemas ODDGEN, OGDEMO (master branch as of build time)
