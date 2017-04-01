@@ -60,15 +60,12 @@ case "$1" in
 		echo "Database ready to use. Enjoy! ;-)"
 
 		# trap interrupt/terminate signal for graceful termination
-		trap "gosu oracle bash -c '${ORACLE_HOME}/bin/lsnrctl stop && echo shutdown immediate\; | ${ORACLE_HOME}/bin/sqlplus -S / as sysdba'" INT TERM
+		trap "gosu oracle bash -c 'echo Starting graceful shutdown... && echo shutdown immediate\; | ${ORACLE_HOME}/bin/sqlplus -S / as sysdba && ${ORACLE_HOME}/bin/lsnrctl stop'" INT TERM
 
-		# waiting for all oracle processed to complete
-		procCount=`ps -u oracle | wc -l`
-		while [ $procCount -gt 1 ]
-		do 
-			sleep 1
-		done
-		echo "All Oracle processes terminated, graceful shutdown completed."
+		# waiting for termination of tns listener
+		PID=`ps -e | grep tnslsnr | awk '{print $1}'`
+		while test -d /proc/$PID; do sleep 1; done
+		echo "Graceful shutdown completed."
 		;;
 
 	*)
