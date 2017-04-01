@@ -4,7 +4,7 @@
 
 This image contains the following:
 
-* Oracle Linux 7.3
+* Oracle Linux 7.3-1.0.4.el7.x86_64
 * Oracle Database 12.2.0.1 Enterprise Edition with CDB architecture
 	* Container database (CDB$ROOT)
 	* Pluggable database (OPDB1)
@@ -37,7 +37,7 @@ Complete the following steps to create a new container:
 		
 3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
-Feel free to stop the docker container after a successful installation with ```docker stop -t 30 ocdb```. The container should shutdown the database gracefully within the given 30 seconds and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
+Feel free to stop the docker container after a successful installation with ```docker stop -t 60 ocdb```. The container should shutdown the database gracefully within the given 60 seconds and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
 
 
 ### Options
@@ -97,7 +97,7 @@ docker exec ocdb ln -s /usr/share/zoneinfo/Europe/Zurich /etc/localtime
 Restart your container to ensure the new setting take effect.
 
 ```
-docker restart -t 30 ocdb
+docker restart -t 60 ocdb
 ```
 
 ## Access To Database Services
