@@ -59,9 +59,16 @@ case "$1" in
 		echo ""
 		echo "Database ready to use. Enjoy! ;-)"
 
-		# Infinite wait loop, trap interrupt/terminate signal for graceful termination
-		trap "gosu oracle bash -c 'echo shutdown immediate\; | ${ORACLE_HOME}/bin/sqlplus -S / as sysdba'" INT TERM
-		while true; do sleep 1; done
+		# trap interrupt/terminate signal for graceful termination
+		trap "gosu oracle bash -c '${ORACLE_HOME}/bin/lsnrctl stop && echo shutdown immediate\; | ${ORACLE_HOME}/bin/sqlplus -S / as sysdba'" INT TERM
+
+		# waiting for all oracle processed to complete
+		procCount=`ps -u oracle | wc -l`
+		while [ $procCount -gt 1 ]
+		do 
+			sleep 1
+		done
+		echo "All Oracle processes terminated, graceful shutdown completed."
 		;;
 
 	*)
