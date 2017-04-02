@@ -13,7 +13,12 @@ enable_http(){
 apex_epg_config(){
 	cd ${ORACLE_HOME}/apex
 	echo "Setting up EPG for APEX by running: @apex_epg_config ${ORACLE_HOME}"
+	# ensure ORACLE_HOME does not contain soft links to avoid "ORA-22288: file or LOB operation FILEOPEN failed" (for APEX images)
+	ORACLE_HOME_OLD=${ORACLE_HOME}
+	ORACLE_HOME=`readlink -f ${ORACLE_HOME}`
 	echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA @apex_epg_config ${ORACLE_HOME}
+	# reset ORACLE_HOME
+	ORACLE_HOME=${ORACLE_HOME_OLD}
 	echo "Unlock anonymous account on PDB"
 	echo "ALTER USER ANONYMOUS ACCOUNT UNLOCK;" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA
 	echo "Unlock anonymous account on CDB"
@@ -24,7 +29,6 @@ apex_epg_config(){
 }
 
 apex_create_tablespace(){
-	cd ${ORACLE_HOME}/apex
 	echo "Creating APEX tablespace."
 	${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA <<EOF
 		CREATE TABLESPACE apex DATAFILE '${ORACLE_BASE}/oradata/${ORACLE_SID}/${PDB_NAME}/apex01.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M;
@@ -32,16 +36,11 @@ EOF
 }
 
 apex_install(){	
+	cd ${ORACLE_HOME}/apex
 	echo "Installing APEX."
 	echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA @apexins APEX APEX TEMP /i/
 	echo "Setting APEX ADMIN password."
     echo -e "\n\n${APEX_PASS}" | /opt/sqlcl/bin/sql -s -l sys/${PASS}@${PDB_NAME} AS sysdba @apxchpwd.sql
-}
-
-apex_load_images() {
-	echo "Load APEX images."
-	# do not load images from path containing soft links to avoid "ORA-22288: file or LOB operation FILEOPEN failed"
-	echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA @apxldimg.sql `readlink -f ${ORACLE_HOME}`
 }
 
 apex_rest_config() {
@@ -54,7 +53,6 @@ apex_rest_config() {
 disable_http
 apex_create_tablespace
 apex_install
-apex_load_images
 apex_epg_config
 apex_rest_config
 enable_http
