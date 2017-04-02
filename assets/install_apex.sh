@@ -40,7 +40,8 @@ apex_install(){
 	echo "Installing APEX."
 	echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS}@${PDB_NAME} AS SYSDBA @apexins APEX APEX TEMP /i/
 	echo "Setting APEX ADMIN password."
-    echo -e "\n\n${APEX_PASS}" | ${ORACLE_HOME}/bin/sql -s -l sys/${PASS}@${PDB_NAME} AS sysdba @apxchpwd.sql
+	chmod +x ${ORACLE_HOME}/sqldeveloper/sqlcl/bin/sql
+ 	echo -e "\n\n${APEX_PASS}" | ${ORACLE_HOME}/sqldeveloper/sqlcl/bin/sql -s -l sys/${PASS}@${PDB_NAME} AS sysdba @apxchpwd.sql
 }
 
 apex_rest_config() {
