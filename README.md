@@ -13,7 +13,7 @@ This image contains the following:
 		* FTLDB 1.5.0
 		* tePLSQL (master branch as of build time)
 		* oddgen example/tutorial schemas ODDGEN, OGDEMO (master branch as of build time)
-* Oracle SQLcl: Release 4.2.0.16.355.0402 
+* Oracle SQLcl: Release 4.2.0.17.073.1038 
 	
 Pull the latest build from [Docker Store](https://store.docker.com/community/images/phsalvisberg/oddgendemo-cdb)
 
@@ -35,7 +35,7 @@ Complete the following steps to create a new container:
 
 		docker run -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 		
-3. wait around **30 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
+3. wait around **25 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
 Feel free to stop the docker container after a successful installation with ```docker stop -t 60 ocdb```. The container should shutdown the database gracefully within the given 60 seconds and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
 
