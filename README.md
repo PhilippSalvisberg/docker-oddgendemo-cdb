@@ -2,7 +2,7 @@
 
 ## Content
 
-This image contains the following:
+This private image contains the following:
 
 * Oracle Linux 7.3-1.0.4.el7.x86_64
 * Oracle Database 12.2.0.1 Enterprise Edition with CDB architecture
@@ -13,8 +13,6 @@ This image contains the following:
 		* FTLDB 1.5.0
 		* tePLSQL (master branch as of build time)
 		* oddgen example/tutorial schemas ODDGEN, OGDEMO (master branch as of build time)
-	
-Pull the latest build from [Docker Store](https://store.docker.com/community/images/phsalvisberg/oddgendemo-cdb)
 
 Please see [Readme Information for Oracle Database 12c Release 2 (12.2)](https://docs.oracle.com/database/122/READM/features-not-available-12-2-beta.htm#READM-GUID-80BA0601-969E-45F3-9AAF-E570B03E7D7D) regarding restrictions of CDB architecture.
 
