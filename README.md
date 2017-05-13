@@ -2,7 +2,7 @@
 
 ## Content
 
-Dockerfile including scripts to build a private image containing the following:
+Dockerfile including scripts to build an image containing the following:
 
 * Oracle Linux 7.3-1.0.4.el7.x86_64
 * Oracle Database 12.2.0.1 Enterprise Edition with CDB architecture
@@ -18,6 +18,8 @@ Please see [Readme Information for Oracle Database 12c Release 2 (12.2)](https:/
 
 See [docker-oddgendemo](https://github.com/PhilippSalvisberg/docker-oddgendemo) for a non-CDB variant of this image.
 
+Due to [OTN Developer License Terms](http://www.oracle.com/technetwork/licenses/standard-license-152015.html) I cannot make this image available on a public Docker registry.
+
 ## Installation
 
 ### Using Default Settings (recommended)
@@ -31,7 +33,6 @@ Complete the following steps to create a new container:
 2. wait around **25 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
 Feel free to stop the docker container after a successful installation with ```docker stop -t 60 ocdb```. The container should shutdown the database gracefully within the given 60 seconds and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
-
 
 ### Options
 
