@@ -1,3 +1,6 @@
+# DEPRECATION NOTICE
+This project has been deprecated in favor of the [docker-oddgendemo](https://github.com/PhilippSalvisberg/docker-oddgendemo). This repository will not be updated anymore.
+
 # oddgen Demo using an Oracle Database 12.2.0.1 Enterprise Edition with CDB Architecture
 
 ## Content
@@ -29,7 +32,7 @@ Complete the following steps to create a new container:
 1. Create the container
 
 		docker run -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
-		
+
 2. wait around **25 minutes** until the Oracle database instance is created and APEX is installed in the pluggable database. Check logs with ```docker logs -f -t ocdb```. The container is ready to use when the last line in the log is ```Database ready to use. Enjoy! ;-)```. The container stops if an error occurs. Check the logs to determine how to proceed.
 
 Feel free to stop the docker container after a successful installation with ```docker stop -t 60 ocdb```. The container should shutdown the database gracefully within the given 60 seconds and persist the data fully (ready for backup). Next time you start the container using ```docker start ocdb``` the database will start up.
@@ -65,7 +68,7 @@ The image defines a volume for ```/u01/app/oracle```. You may map this volume to
 docker run -v ocdb:/u01/app/oracle -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
 ```
 
-Here's an example mapping the local directory ```$HOME/docker/ocdb/u01/app/oracle``` to ```/u01/app/oracle```. 
+Here's an example mapping the local directory ```$HOME/docker/ocdb/u01/app/oracle``` to ```/u01/app/oracle```.
 
 ```
 docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
@@ -75,7 +78,7 @@ docker run -v $HOME/docker/ocdb/u01/app/oracle:/u01/app/oracle -d -p 1522:1522 -
 
 #### Change Timezone
 
-The default timezone of the container is UTC. To query the available timezones run: 
+The default timezone of the container is UTC. To query the available timezones run:
 
 ```
 docker exec ocdb ls -RC /usr/share/zoneinfo
@@ -100,7 +103,7 @@ docker restart -t 60 ocdb
 
 [http://localhost:8083/em/](http://localhost:8083/em/)
 
-User | Password 
+User | Password
 -------- | -----
 system | oracle
 sys | oracle
@@ -109,7 +112,7 @@ sys | oracle
 
 [http://localhost:8084/apex/](http://localhost:8084/apex/)
 
-Property | Value 
+Property | Value
 -------- | -----
 Workspace | INTERNAL
 User | ADMIN
@@ -119,7 +122,7 @@ Password | Oracle12c!
 
 To access the database e.g. from SQL Developer you configure the following properties:
 
-Property | Value 
+Property | Value
 -------- | -----
 Hostname | localhost
 Port | 1522
@@ -129,7 +132,7 @@ Service for pluggable database | opdb1.docker
 
 The configured user with their credentials are:
 
-User | Password 
+User | Password
 -------- | -----
 pdbadmin | oracle
 system | oracle
@@ -155,14 +158,14 @@ Use the following connect string to connect as scott via SQL*Plus or SQLcl: ```s
 
 Complete the following steps to backup the data volume:
 
-1. Stop the container with 
+1. Stop the container with
 
 		docker stop -t 30 ocdb
-		
+
 2. Backup the data volume to a compressed file ```ocdb.tar.gz``` in the current directory with a little help from the ubuntu image
 
 		docker run --rm --volumes-from ocdb -v $(pwd):/backup ubuntu tar czvf /backup/ocdb.tar.gz /u01/app/oracle
-		
+
 3. Restart the container
 
 		docker start ocdb
@@ -171,36 +174,36 @@ Complete the following steps to backup the data volume:
 
 Complete the following steps to restore an image from scratch. There are other ways, but this procedure is also applicable to restore a database on another machine:
 
-1. Stop the container with 
+1. Stop the container with
 
 		docker stop -t 30 ocdb
 
-2. Remove the container with its associated volume 
+2. Remove the container with its associated volume
 
 		docker rm -v ocdb
-		
+
 3. Remove unreferenced volumes, e.g. explicitly created volumes by previous restores
 
 		docker volume ls -qf dangling=true | xargs docker volume rm
-	
+
 4. Create an empty data volume named ```ocdb```
 
 		docker volume create --name ocdb
 
 5. Populate data volume ```ocdb``` with backup from file ```ocdb.tar.gz``` with a little help from the ubuntu image
 
-		docker run --rm -v ocdb:/u01/app/oracle -v $(pwd):/backup ubuntu tar xvpfz /backup/ocdb.tar.gz -C /			
+		docker run --rm -v ocdb:/u01/app/oracle -v $(pwd):/backup ubuntu tar xvpfz /backup/ocdb.tar.gz -C /
 
 6. Create the container using the ```ocdb```volume
 
 		docker run -v ocdb:/u01/app/oracle -d -p 1522:1522 -p 8083-8084:8083-8084 -h ocdb --name ocdb phsalvisberg/oddgendemo-cdb
-		
+
 7. Check log of ```ocdb``` container
 
 		docker logs ocdb
-	
+
 	The end of the log should look as follows:
-	
+
 		Reuse existing database.
 
 		(...)
@@ -209,7 +212,7 @@ Complete the following steps to restore an image from scratch. There are other w
 
 ## Issues
 
-Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/): 
+Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/):
 
 * [Existing issues](https://github.com/PhilippSalvisberg/docker-oddgendemo-cdb/issues)
 * [submit new issue](https://github.com/PhilippSalvisberg/docker-oddgendemo-cdb/issues/new)
@@ -223,6 +226,6 @@ This Dockerfile is based on the following work:
 
 ## License
 
-docker-oddgendemo is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>. 
+docker-oddgendemo is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>.
 
 See [OTN Developer License Terms](http://www.oracle.com/technetwork/licenses/standard-license-152015.html) and [Oracle Database Licensing Information User Manual](https://docs.oracle.com/database/122/DBLIC/Licensing-Information.htm#DBLIC-GUID-B6113390-9586-46D7-9008-DCC9EDA45AB4) regarding Oracle Database licenses.
