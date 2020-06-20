@@ -15,7 +15,7 @@ Dockerfile including scripts to build an image containing the following:
 		* APEX 5.1.1 including APEX\_LISTENER and APEX\_REST\_PUBLIC\_USER
 		* FTLDB 1.5.0
 		* tePLSQL (master branch as of build time)
-		* oddgen example/tutorial schemas ODDGEN, OGDEMO (master branch as of build time)
+		* oddgen example/tutorial schemas ODDGEN, OGDEMO (main branch as of build time)
 
 Please see [Readme Information for Oracle Database 12c Release 2 (12.2)](https://docs.oracle.com/database/122/READM/features-not-available-12-2-beta.htm#READM-GUID-80BA0601-969E-45F3-9AAF-E570B03E7D7D) regarding restrictions of CDB architecture.
 
